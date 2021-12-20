@@ -1,0 +1,63 @@
+--- # This is my docker play-book
+- hosts: docker
+  user: ansible
+  become: yes
+  connection: ssh
+  tasks:
+    - name: docker configuration
+      yum_repository:
+        name: docker-repository
+        baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
+        enabled: true
+        gpgcheck: no
+        description: docker repository
+
+
+    - name: installing docker package
+      command: "yum install docker-ce -y --nobest"
+
+    - name: install docker-ce python packagde
+      command: "pip3 install docker"
+      ignore_errors: true
+
+
+    - name: starting docker service
+      service:
+        name: "docker"
+        state: started
+        enabled: yes
+
+
+    - name: install python3
+      package:
+        name: "python36"
+        state: present
+
+
+    - name: pull httpd server image
+      docker_image:
+        name: "httpd"
+        source: pull
+
+
+    - name: Create mount directory
+      file:
+        path: "/html"
+        state: directory
+
+
+    - name: Copy the html code in /html direcotry
+      copy:
+        src: "/root/docker-ansible/website/webpage.html"
+        dest: "/html/"
+
+
+    - name: run docker image
+      docker_container:
+        name: httpd
+        image: "httpd"
+        exposed_ports: 8080
+        ports:
+          - "8080:80"
+        volumes:
+          - /html/:/usr/local/apache2/htdocs/

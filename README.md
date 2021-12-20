@@ -2,6 +2,8 @@
 
 ![integration docker ansible (1)](https://user-images.githubusercontent.com/63963025/146724182-062a8fcc-8edc-48c7-99a7-1483bf0280ca.png)
 
+## Video link:- https://drive.google.com/file/d/1-q2UGPkn9cSzb-ZZ7wDVee3yDufyyQS3/view?usp=sharing
+
 ## steps to be followed :- 
 - Create a 2 Ec2 instance With same configuration 
 - select Amazon Machine Image(AMI)
@@ -90,8 +92,8 @@ vi /etc/ansible/hosts
 vi /etc/ansible/ansible.cfg
 ```
 
-uncomment inventory = /etc/ansible/hosts 
-uncomment sudo-user = root
+<b>uncomment inventory = /etc/ansible/hosts<br>
+uncomment sudo-user = root<br></b>
 
 ![Screenshot (254)](https://user-images.githubusercontent.com/63963025/146746689-a7b1c6c4-98ea-405b-8803-a4ccc459297a.png)
 ![Screenshot (253)](https://user-images.githubusercontent.com/63963025/146746693-f15f5f79-3b84-4ad8-af33-35a8c2f60725.png)
@@ -126,9 +128,9 @@ vi /etc/ssh/sshd_config
 ```
 ![Screenshot (264)](https://user-images.githubusercontent.com/63963025/146747813-cfc22d59-4aec-4edc-ba0c-95c1b466c713.png)
 
-uncomment permitlogin yes
-uncomment passwrdAuthentication yes
-comment passwrdAuthentication no
+<b>uncomment permitlogin yes<br>
+uncomment passwrdAuthentication yes<br>
+comment passwrdAuthentication no<br></b>
 
 with same node 
 ![Screenshot (266)](https://user-images.githubusercontent.com/63963025/146748182-971ab660-d224-4289-8e18-ef8ca44611ae.png)
@@ -154,4 +156,61 @@ ssh-keygen
 
 
 ## Copy key to remote location
+```
+ssh-copy-id ansible@172.56.89.105
+```
+![Screenshot (270)](https://user-images.githubusercontent.com/63963025/146764595-968962e6-e377-4205-ae00-39a3eecb8201.png)
+
+<b>Change your ip adress</b>
+
+test your ssh is working or not 
+
+![Screenshot (271)](https://user-images.githubusercontent.com/63963025/146764647-7d31ea01-b25c-4554-a838-15b45071f50d.png)
+
+![Screenshot (272)](https://user-images.githubusercontent.com/63963025/146764676-9ba5bbc6-cc4d-4062-8621-be827ee7a300.png)
+
+## Create Ansible Play-book 
+
+```
+vi docker.yml
+```
+
+```
+--- # This is my docker play-book
+- hosts: docker
+  user: ansible
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  ```
+  Now test the playbook
+  ```
+  ansible-playbook docker.yml
+  ```
+  ![Screenshot (275)](https://user-images.githubusercontent.com/63963025/146765183-c7f48587-fd71-4659-8e3d-45b86bfff33a.png)
+![Screenshot (274)](https://user-images.githubusercontent.com/63963025/146765185-f7a50f96-59c0-484d-b5ab-1da2d9eafe90.png)
+
+## At last create website folder and webpage
+
+  ![Screenshot (277)](https://user-images.githubusercontent.com/63963025/146765273-62a578ca-06ff-4bfb-b0fb-7946a236c49a.png)
+![Screenshot (275)](https://user-images.githubusercontent.com/63963025/146765279-816daab2-c275-47ed-a12e-62999793f75a.png)
+```
+ansible-playbook docker.yml
+```
+
+![Screenshot (285)](https://user-images.githubusercontent.com/63963025/146765374-68141e86-87c7-4f0d-a972-39db5e502d2d.png)
+
+![Screenshot (286)](https://user-images.githubusercontent.com/63963025/146765451-5925fce6-928b-4e77-9905-d3cc08b101c7.png)
+![Screenshot (284)](https://user-images.githubusercontent.com/63963025/146765452-beb3b3ac-5fd6-4248-88ad-8fcc806cd1ed.png)
+
+
+<b> Check Docker is installed and your conatiner with httpd is ready </b>
+```
+docker --version
+
+docker images 
+
+docker ps -a
+
+doccker ps 
 ```
